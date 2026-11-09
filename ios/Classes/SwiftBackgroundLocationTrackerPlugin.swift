@@ -2,7 +2,11 @@ import Flutter
 import UIKit
 import CoreLocation
 
-public class SwiftBackgroundLocationTrackerPlugin: FlutterPluginAppLifeCycleDelegate {
+// This plugin does not use any application lifecycle events, so it must not
+// subclass `FlutterPluginAppLifeCycleDelegate` or register as an application
+// delegate. Doing so triggers Flutter's "uses deprecated application lifecycle
+// events" warning under the UIScene lifecycle.
+public class SwiftBackgroundLocationTrackerPlugin: NSObject {
     
     static let identifier = "com.icapps.background_location_tracker"
     
@@ -35,7 +39,6 @@ extension SwiftBackgroundLocationTrackerPlugin: FlutterPlugin {
         let methodChannel = ForegroundChannel.getMethodChannel(with: registrar)
         let instance = SwiftBackgroundLocationTrackerPlugin()
         registrar.addMethodCallDelegate(instance, channel: methodChannel)
-        registrar.addApplicationDelegate(instance)
         
         // Ensure correct location permissions
         LocationManager.ensureCorrectPermissions()
